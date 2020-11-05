@@ -2,10 +2,19 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
+const getMean = (nums) => {
+  let reducer = nums.reduce((a, b) => Number(a) + Number(b));
+  let average = reducer / nums.length;
+  return average;
+};
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/mean/:nums", (req, res) => {});
+app.get("/mean/:nums", (req, res) => {
+  let nums = req.params.nums.split(",");
+  res.json({ operation: "mean", value: getMean(nums) });
+});
 
 app.get("/median/:nums", (req, res) => {});
 
