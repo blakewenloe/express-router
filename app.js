@@ -8,6 +8,12 @@ const getMean = (nums) => {
   return average;
 };
 
+const getMedian = (arr) => {
+  const mid = Math.floor(arr.length / 2),
+    nums = [...arr].sort((a, b) => a - b);
+  return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+};
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -16,7 +22,10 @@ app.get("/mean/:nums", (req, res) => {
   res.json({ operation: "mean", value: getMean(nums) });
 });
 
-app.get("/median/:nums", (req, res) => {});
+app.get("/median/:nums", (req, res) => {
+  let nums = req.params.nums.split(",");
+  res.json({ operation: "median", value: getMedian(nums) });
+});
 
 app.get("/mode/:nums", (req, res) => {});
 
