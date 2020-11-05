@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-
+const ExpressError = require("./expressError");
 const getMean = (nums) => {
   let reducer = nums.reduce((a, b) => Number(a) + Number(b));
   let average = reducer / nums.length;
@@ -42,18 +42,53 @@ const getMode = (nums) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/mean/:nums", (req, res) => {
-  let nums = req.params.nums.split(",");
+app.get("/mean/", (req, res) => {
+  if (!req.query.nums) {
+    throw new ExpressError(
+      "You must pass a query key of nums with a comma-separated list of numbers.",
+      400
+    );
+  }
+  let nums = req.query.nums.split(",");
+
+  if (nums instanceof Error) {
+    throw new ExpressError(nums.message);
+  }
+
   res.json({ operation: "mean", value: getMean(nums) });
 });
 
-app.get("/median/:nums", (req, res) => {
-  let nums = req.params.nums.split(",");
+app.get("/median/", (req, res) => {
+  if (!req.query.nums) {
+    throw new ExpressError(
+      "You must pass a query key of nums with a comma-separated list of numbers.",
+      400
+    );
+  }
+
+  let nums = req.query.nums.split(",");
+
+  if (nums instanceof Error) {
+    throw new ExpressError(nums.message);
+  }
+
   res.json({ operation: "median", value: getMedian(nums) });
 });
 
-app.get("/mode/:nums", (req, res) => {
-  let nums = req.params.nums.split(",");
+app.get("/mode/", (req, res) => {
+  if (!req.query.nums) {
+    throw new ExpressError(
+      "You must pass a query key of nums with a comma-separated list of numbers.",
+      400
+    );
+  }
+
+  let nums = req.query.nums.split(",");
+
+  if (nums instanceof Error) {
+    throw new ExpressError(nums.message);
+  }
+
   res.json({ operation: "median", value: getMode(nums) });
 });
 
